@@ -1,0 +1,41 @@
+## http://github.com/github/gitignore/blob/main/Dotnet.gitignore
+
+# ==========================================
+# .NET Build and Release Artifacts
+# ==========================================
+# These directories contain the compiled binaries and intermediate files.
+# We never commit these because they are generated dynamically during `dotnet build`.
+[Bb]in/
+[Oo]bj/
+out/
+
+# ==========================================
+# IDE and Editor Specific Files
+# ==========================================
+# Rider / Resharper
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+# Note: If you share specific launch configurations with a team, 
+# you might want to track .vscode/launch.json, but keeping it ignored is safer for now.
+
+# Visual Studio Cache & Configuration
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# ==========================================
+# OS / System Specific Files
+# ==========================================
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# Docker Artifacts
+# ==========================================
+# Avoid committing local docker data if you run localized databases/caches later
+.docker/
