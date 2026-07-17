@@ -1,7 +1,7 @@
 # ==========================================
 # STAGE 1: Build & Test Environment
 # ==========================================
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build-env
 WORKDIR /app
 
 # Copy the solution file and project configuration files first
@@ -27,7 +27,7 @@ RUN dotnet publish src/Chess.Controller/Chess.Controller.csproj -c Release -o /a
 # ==========================================
 # STAGE 2: Lightweight Runtime Environment
 # ==========================================
-FROM mcr.microsoft.com/dotnet/runtime:8.0
+FROM mcr.microsoft.com/dotnet/runtime:10.0
 WORKDIR /app
 
 # Copy only the compiled binaries from Stage 1
