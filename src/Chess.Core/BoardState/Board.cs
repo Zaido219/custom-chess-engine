@@ -6,6 +6,7 @@ public class Board
     private readonly int[] _squares;
     // method that will allow chess.ui to query whats piece is on this index
     // without knowing how the board is internally represented
+    // this is the indexer
     public int this[int squareIndex]
     {
         get => _squares[squareIndex];

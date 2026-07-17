@@ -6,9 +6,25 @@ public class BoardRenderer
 {
     public static void Render(Board board)
     {
-        
+        for(int rank = 7; rank >=  0; rank--)
+        {
+            for(int file = 0; file < 8; file++)
+            {
+                // think 1d here not 2d
+                int index = (rank * 8) + file;
+                // the raw piece integer
+                int piece = board[index];
+                //map piece into its unicode symbol
+                string symbol = mapUnicode(piece);
+                // write to the console
+                // space for adjustment
+                Console.Write(symbol + " ");
+            }
+            // first row finished at this point
+            Console.WriteLine();
+        }
     }
-    private string mapUnicode(int piece)
+    private static string mapUnicode(int piece)
     {
         return piece switch
         {
