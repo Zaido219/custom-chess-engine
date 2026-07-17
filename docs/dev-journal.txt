@@ -1,3 +1,2 @@
-April 19:
-    Finished Phase 1.
-    Next would be creating the use case diagram.
+run this to clean docker left-overs
+.\run-build.bat 
