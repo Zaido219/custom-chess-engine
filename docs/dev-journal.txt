@@ -1,2 +1,37 @@
 run this to clean docker left-overs
 .\run-build.bat 
+
+target directory for this build
+ChessGame/                  <-- Root Solution Folder
+├── ChessGame.sln           <-- Solution file (manages project relationships)
+│
+├── src/
+│   ├── Chess.Core/         <-- Class Library (.NET Standard or .NET 8/9 Core)
+│   │   ├── Chess.Core.csproj
+│   │   │
+│   │   ├── BoardState/
+│   │   │   ├── Board.cs             <-- Manages the 1D/2D array, active color, turn history
+│   │   │   ├── Piece.cs             <-- Static class/helper for bitmasked pieces
+│   │   │   └── FenUtility.cs        <-- Decodes/Encodes FEN strings to Board states
+│   │   │
+│   │   ├── MoveGeneration/
+│   │   │   ├── Move.cs              <-- Lightweight struct representing a single move
+│   │   │   └── MoveGenerator.cs     <-- Calculates pseudo-legal and legal moves
+│   │   │
+│   │   └── EngineBot/
+│   │       ├── IBot.cs              <-- Interface defining what a Bot needs to do
+│   │       ├── MinimaxBot.cs        <-- Implements search & Alpha-Beta pruning
+│   │       ├── Evaluation.cs        <-- Evaluates board static scoring (heuristics)
+│   │       └── TranspositionTable.cs<-- (Optional/Later) Zobrist Hashing cache
+│   │
+│   ├── Chess.UI/           <-- Presentation Layer (Console, Raylib, or desktop framework)
+│   │   ├── Chess.UI.csproj  <-- Has a reference to Chess.Core!
+│   │   │
+│   │   ├── BoardRenderer.cs         <-- Draws the grid and pieces
+│   │   ├── InputHandler.cs          <-- Grabs mouse clicks, coordinates, or keystrokes
+│   │   └── AssetLoader.cs           <-- Loads sprites/images for pieces
+│   │
+│   └── Chess.Controller/   <-- Orchestration Layer (Console App/Runnable entry point)
+│       ├── Chess.Controller.csproj <-- Has references to BOTH Core and UI!
+│       │
+│       └── Program.cs               <-- Game Loop (initializes Game, handles player inputs)           <-- XUnit/NUnit project targeting the core logic
