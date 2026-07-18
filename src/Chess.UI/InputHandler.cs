@@ -2,7 +2,8 @@ using Chess.Core.BoardState;
 using Chess.Core.MoveGenerations;
 
 namespace Chess.UI;
-public class ConsoleInputHandler()
+
+public static class ConsoleInputHandler
 {
     // map letters to file (note that files are the vertical columns)
     private static readonly Dictionary<char, int> FileMap = new Dictionary<char, int>
@@ -16,13 +17,13 @@ public class ConsoleInputHandler()
         ['g'] = 6,
         ['h'] = 7,
     };
-    public void Move(string move, Board board)
+    public static void Move(string move, Board board)
     {
         // TODO:Have some checking for that move string, malformed and invalid
         // moves will look something like this : e2e4
         // split the string by 2
-        string sourceSquare = move.Substring(0,2);
-        string destinationSquare = move.Substring(2,2);
+        string sourceSquare = move.Substring(0, 2);
+        string destinationSquare = move.Substring(2, 2);
         // get the coordinate
         int parsedSource = ParseSquareName(sourceSquare);
         int parsedDestination = ParseSquareName(destinationSquare);
@@ -30,7 +31,7 @@ public class ConsoleInputHandler()
         //update board's state with that new move
         board.MakeMove(newMove);
     }
-    private int ParseSquareName(string squareName)
+    private static int ParseSquareName(string squareName)
     {
         char fileChar = squareName[0];
         char rankChar = squareName[1];
