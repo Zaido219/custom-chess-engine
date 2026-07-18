@@ -2,9 +2,10 @@
 using Chess.Core.BoardState;
 // console doesnt support  unicode out of the box
 System.Console.OutputEncoding = System.Text.Encoding.UTF8;
+string startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 Board board = new Board();
 FenUtility fenUtility = new FenUtility();
-fenUtility.loadFen("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2", board);
+fenUtility.loadFen(startingPosition, board);
 
 BoardRenderer.Render(board);
 
