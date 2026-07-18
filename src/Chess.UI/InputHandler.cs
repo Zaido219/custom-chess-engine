@@ -1,4 +1,5 @@
-using System.Runtime.CompilerServices;
+using Chess.Core.BoardState;
+using Chess.Core.MoveGenerations;
 
 namespace Chess.UI;
 public class ConsoleInputHandler()
@@ -15,12 +16,26 @@ public class ConsoleInputHandler()
         ['g'] = 6,
         ['h'] = 7,
     };
-    public void Move(string move)
+    public void Move(string move, Board board)
     {
         // moves will look something like this : e2e4
-        // split the string by
+        // split the string by 2
         string sourceSquare = move.Substring(0,2);
         string destinationSquare = move.Substring(2,2);
-        // match first char to the map
+        // get the coordinate
+        int parsedSource = ParseSquareName(sourceSquare);
+        int parsedDestination = ParseSquareName(destinationSquare);
+        Move newMove = new Move(parsedSource, parsedDestination);
+    }
+    private int ParseSquareName(string squareName)
+    {
+        char fileChar = squareName[0];
+        char rankChar = squareName[1];
+
+        int file = FileMap[fileChar];
+        int rank = rankChar - '1'; // in c# chars is secretly just a number, this expression will be evaluated to thier
+        // underlying numerical value
+
+        return (rank * 8) + file;
     }
 }
