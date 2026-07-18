@@ -18,6 +18,7 @@ public class ConsoleInputHandler()
     };
     public void Move(string move, Board board)
     {
+        // TODO:Have some checking for that move string, malformed and invalid
         // moves will look something like this : e2e4
         // split the string by 2
         string sourceSquare = move.Substring(0,2);
@@ -26,6 +27,8 @@ public class ConsoleInputHandler()
         int parsedSource = ParseSquareName(sourceSquare);
         int parsedDestination = ParseSquareName(destinationSquare);
         Move newMove = new Move(parsedSource, parsedDestination);
+        //update board's state with that new move
+        board.MakeMove(newMove);
     }
     private int ParseSquareName(string squareName)
     {

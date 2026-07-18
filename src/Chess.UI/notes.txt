@@ -1,0 +1,3 @@
+Chess.UI
+must not care about logic
+must not care about moving pieces

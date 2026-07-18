@@ -1,3 +1,5 @@
+using Chess.Core.MoveGenerations;
+
 namespace Chess.Core.BoardState;
 public class Board
 {
@@ -21,5 +23,19 @@ public class Board
 
         _squares[0] = Piece.White | Piece.Bishop;
         _squares[63] = Piece.Black | Piece.Queen;
+    }
+    public void MakeMove(Move move)
+    {
+        // get the piece from move.startSquare
+        int piece = this[move.StartSquare];
+        // check for none piece
+        if(piece == Piece.None)
+        {
+            throw new Exception("Pieces to be moved can't be none");
+        }
+        //assing it to move.targetSquare
+        _squares[move.TargetSquare] = piece;
+        //set move.StartSquare = Piece.None
+        _squares[move.StartSquare] = Piece.None;
     }
 }
