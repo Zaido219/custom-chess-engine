@@ -12,6 +12,8 @@ public class BoardRenderer
             {
                 // think 1d here not 2d
                 int index = (rank * 8) + file;
+                // this piece here is already in the board's state
+                // we're only getting this so that we can map this to the current unicode symbol
                 // the raw piece integer
                 int piece = board[index];
                 //map piece into its unicode symbol
