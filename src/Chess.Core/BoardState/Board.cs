@@ -10,6 +10,9 @@ public class Board
     public int this[int squareIndex]
     {
         get => _squares[squareIndex];
+        // indexer so that fen utility can populate the board
+        // internal means this method is only accesible to chess.core
+        internal set => _squares[squareIndex] = value;
     }
 
     public Board()
