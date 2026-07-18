@@ -1,6 +1,4 @@
 namespace Chess.Core.MoveGenerations;
-// just encapsulates the move 
-// doesnt do any movement
 public struct Move
 {
     public readonly int StartSquare;
