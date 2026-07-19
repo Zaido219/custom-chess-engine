@@ -21,6 +21,18 @@ public static class Piece
     public static int pieceType(int piece) => piece & typeMask;
     // helper to check if piece is of specific color
     public static bool isColor(int piece, int color) => (piece & colorMask) == color;
+    public static bool  isSlidingPiece(int piece)
+    {
+        // get the base type of the piece
+        int baseType = pieceType(piece);
+        // check piece type
+        //todo: there might a shorthand for this 
+        if(baseType == Bishop || baseType == Rook || baseType ==Queen)
+        {
+            return true;
+        }
+        return false;
+    }
 }
 
 // How this works in practice:If we pass our White Bishop (12 or 01100) into these helpers:
