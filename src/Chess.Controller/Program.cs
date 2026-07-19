@@ -66,16 +66,22 @@ string[] fullGameMoves = new string[]
     "b5b6", "g2g1q",
     "f5f6", "g1d1" // Black Wins via Checkmate!
 };
- Console.Write("This is a stupid way to remind but, you have turned off smart-control, turn it back-on before ending coding session");
+Console.Write("This is a stupid way to remind but, you have turned off smart-control, turn it back-on before ending coding session");
 
 // console input loop
-foreach(string moveStr in fullGameMoves)
+foreach (string moveStr in fullGameMoves)
 {
     Console.Clear();
     // generate every pseudo-legal option for the active player
     // chess is a dynamic game, with each move we need to
     // recalculate legal moves
     List<Move> legalMoves = MoveGenerator.GenerateMoves(board);
+    Move currentMove = ConsoleInputHandler.ExtractMove(moveStr);
+    if (!legalMoves.Any(m => m.StartSquare == currentMove.StartSquare &&
+                         m.TargetSquare == currentMove.TargetSquare))
+    {
+        throw new Exception($"Current move {moveStr} is illegal");
+    }
     //check if moveStr is in legalMoves
     ConsoleInputHandler.Move(moveStr, board);
     BoardRenderer.Render(board);
