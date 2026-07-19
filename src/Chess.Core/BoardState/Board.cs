@@ -21,7 +21,9 @@ public class Board
     // track which color is it to move in this current turn
     // remember this are auto implemneted properties, you directly manipulate thier values
     // without wrapping them on a method
-    private  int colorToMove {get; set;} = 8; // chess starts with white to move
+    // returns if who's color turn it is to move
+    // todo:We have make this public make sure that outside class cant mutate this values
+    public  int colorToMove {get; set;} = 8; // chess starts with white to move
     public Board()
     {
         _squares = new int[64];
