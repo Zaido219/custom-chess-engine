@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.IO.Pipes;
+using System.Text.RegularExpressions;
 using Chess.Core.MoveGenerations;
 
 namespace Chess.Core.BoardState;
@@ -30,6 +31,10 @@ public static class MoveGenerator
                 numSquaresToEdge[squareIndex, 1] = numSouth;
                 numSquaresToEdge[squareIndex, 2] = numWest;
                 numSquaresToEdge[squareIndex, 3] = numEast;
+                numSquaresToEdge[squareIndex, 4] = Math.Min(numNorth, numWest);
+                numSquaresToEdge[squareIndex, 5] = Math.Min(numSouth, numWest);
+                numSquaresToEdge[squareIndex, 6] = Math.Min(numNorth, numEast);
+                numSquaresToEdge[squareIndex, 7] = Math.Min(numSouth, numEast);
             }
         }
     }

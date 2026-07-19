@@ -2,6 +2,8 @@
 using Chess.Core.BoardState;
 // console doesnt support  unicode out of the box
 System.Console.OutputEncoding = System.Text.Encoding.UTF8;
+// Call this first so the raycaster knows where the board edges are!
+MoveGenerator.preComputedMoveData();
 string startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 Board board = new Board();
 FenUtility fenUtility = new FenUtility();
