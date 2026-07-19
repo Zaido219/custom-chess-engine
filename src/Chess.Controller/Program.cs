@@ -1,5 +1,6 @@
 ﻿using Chess.UI;
 using Chess.Core.BoardState;
+using Chess.Core.MoveGenerations;
 // console doesnt support  unicode out of the box
 System.Console.OutputEncoding = System.Text.Encoding.UTF8;
 // Call this first so the raycaster knows where the board edges are!
@@ -66,12 +67,18 @@ string[] fullGameMoves = new string[]
     "f5f6", "g1d1" // Black Wins via Checkmate!
 };
  Console.Write("This is a stupid way to remind but, you have turned off smart-control, turn it back-on before ending coding session");
+
 // console input loop
 foreach(string moveStr in fullGameMoves)
 {
     Console.Clear();
+    // generate every pseudo-legal option for the active player
+    // chess is a dynamic game, with each move we need to
+    // recalculate legal moves
+    List<Move> legalMoves = MoveGenerator.GenerateMoves(board);
+    //check if moveStr is in legalMoves
     ConsoleInputHandler.Move(moveStr, board);
     BoardRenderer.Render(board);
     Console.WriteLine("-----------------------------------");
-    await Task.Delay(2000);
+    await Task.Delay(1000);
 }

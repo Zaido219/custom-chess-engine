@@ -1,3 +1,4 @@
+using System.Net;
 using Chess.Core.BoardState;
 using Chess.Core.MoveGenerations;
 
@@ -17,6 +18,20 @@ public static class ConsoleInputHandler
         ['g'] = 6,
         ['h'] = 7,
     };
+    // used to make a Move obj from a fen string
+    public static Move ExtractMove(string moveStr)
+    {
+        // !this is a duplicated logic
+        string sourceSquare = moveStr.Substring(0,2);
+        string destinationSquare = moveStr.Substring(2,2);
+        // int coordinates
+        int parsedSource = ParseSquareName(sourceSquare);
+        int parsedDestination = ParseSquareName(destinationSquare);
+        // make the Move object 
+        Move newMove = new Move(parsedSource, parsedDestination);
+
+        return newMove;
+    }
     public static void Move(string move, Board board)
     {
         // TODO:Have some checking for that move string, malformed and invalid
