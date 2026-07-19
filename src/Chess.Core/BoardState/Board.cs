@@ -1,3 +1,5 @@
+using System.Drawing;
+using System.Reflection;
 using Chess.Core.MoveGenerations;
 
 namespace Chess.Core.BoardState;
@@ -16,7 +18,10 @@ public class Board
         // internal means this method is only accesible to chess.core
         internal set => _squares[squareIndex] = value;
     }
-
+    // track which color is it to move in this current turn
+    // remember this are auto implemneted properties, you directly manipulate thier values
+    // without wrapping them on a method
+    private  int colorToMove {get; set;} = 8; // chess starts with white to move
     public Board()
     {
         _squares = new int[64];
@@ -33,9 +38,27 @@ public class Board
         {
             throw new Exception("Pieces to be moved can't be none");
         }
+        // make sure piece matches, the active color turn
+        // prevents back to back move from a one color
+        // get the color of the current moving piece
+        int pieceColor = Piece.color(piece);
+        if(pieceColor != colorToMove)
+        {
+            throw new Exception("Cannot move an opponent's piece out of turn");
+        }
         //assing it to move.targetSquare
         _squares[move.TargetSquare] = piece;
         //set move.StartSquare = Piece.None
         _squares[move.StartSquare] = Piece.None;
+        // update state, who's color should be moving next
+        // todo: there must be a better way to do this
+        if(colorToMove == Piece.White)
+        {
+            colorToMove = Piece.Black;
+        }
+        else if(colorToMove == Piece.Black)
+        {
+            colorToMove = Piece.White;
+        }
     }
 }
