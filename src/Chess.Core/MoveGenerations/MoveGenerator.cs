@@ -66,7 +66,7 @@ public static class MoveGenerator
         // xor to get the opponent color
         int opponentColor = board.colorToMove ^ 24; // 24 here is the color mask
         // loop over the eight different directions
-        for (int directionIndex = 0; directionIndex < 8; directionIndex++)
+        for (int directionIndex = startDirIndex; directionIndex < endDirIndex; directionIndex++)
         {
             // loop for the number of squares in that direction
             for (int n = 0; n < numSquaresToEdge[startSquare, directionIndex]; n++)
