@@ -41,6 +41,10 @@ public class RayLibBoardRenderer : IBoardRenderer
             Raylib.InitWindow(640, 640, "Chess engine");
             Raylib.SetTargetFPS(60);
         }
+        // dont forget to initialize your textures
+        // once raylib/opengl is active
+        // stupid
+        InitializeTextures();
         // main render loop
         while (!Raylib.WindowShouldClose())
         {

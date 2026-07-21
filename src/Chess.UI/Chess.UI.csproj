@@ -8,9 +8,11 @@
     <PackageReference Include="Raylib-cs" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
-  <None Include="assets\**" CopyToOutputDirectory="PreserveNewest" />
-</ItemGroup>
-
+    <None Include="assets\**" 
+          CopyToOutputDirectory="PreserveNewest" 
+          CopyToPublishDirectory="PreserveNewest" 
+          LinkBase="assets" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
