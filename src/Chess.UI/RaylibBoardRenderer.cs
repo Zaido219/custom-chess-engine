@@ -1,3 +1,4 @@
+using System.Data;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using Chess.Core.BoardState;
@@ -8,6 +9,30 @@ namespace Chess.UI;
 public class RayLibBoardRenderer : IBoardRenderer
 {
     private readonly int _squareSize = 80;
+    // textures should be loaded once at startup and
+    // then simply retrieve by e.g key during rendering if not
+    // Raylib will attempt to load the PNG image off your 
+    // hard drive and allocate new GPU memory 60 times per second per piece.
+    //  Your graphics memory will explode within seconds!
+    private readonly Dictionary<int, Texture2D> _pieceTextures = new();
+    public void InitializeTextures()
+    {
+        // White Pieces
+    _pieceTextures[Piece.White | Piece.King]   = Raylib.LoadTexture("assets/king-w.png");
+    _pieceTextures[Piece.White | Piece.Queen]  = Raylib.LoadTexture("assets/queen-w.png");
+    _pieceTextures[Piece.White | Piece.Rook]   = Raylib.LoadTexture("assets/rook-w.png");
+    _pieceTextures[Piece.White | Piece.Bishop] = Raylib.LoadTexture("assets/bishop-w.png");
+    _pieceTextures[Piece.White | Piece.Knight] = Raylib.LoadTexture("assets/knight-w.png");
+    _pieceTextures[Piece.White | Piece.Pawn]   = Raylib.LoadTexture("assets/pawn-w.png");
+
+    // Black Pieces
+    _pieceTextures[Piece.Black | Piece.King]   = Raylib.LoadTexture("assets/king-b.png");
+    _pieceTextures[Piece.Black | Piece.Queen]  = Raylib.LoadTexture("assets/queen-b.png");
+    _pieceTextures[Piece.Black | Piece.Rook]   = Raylib.LoadTexture("assets/rook-b.png");
+    _pieceTextures[Piece.Black | Piece.Bishop] = Raylib.LoadTexture("assets/bishop-b.png");
+    _pieceTextures[Piece.Black | Piece.Knight] = Raylib.LoadTexture("assets/knight-b.png");
+    _pieceTextures[Piece.Black | Piece.Pawn]   = Raylib.LoadTexture("assets/pawn-b.png");
+    }
     public void Render(Board board)
     {
         // initialized window; if hindi pa
@@ -37,7 +62,6 @@ public class RayLibBoardRenderer : IBoardRenderer
             {
                 int index = (rank * 8) + file;
                 int piece = board[index];
-                string symbol = mapUnicode(piece);
                 // convert board rank/file to screen pixel
                 int screenX = file * _squareSize;
                 int screenY = (7 - rank) * _squareSize;
@@ -48,12 +72,38 @@ public class RayLibBoardRenderer : IBoardRenderer
                 // render piece symbol if the piece isnt empty
                 if(piece != 0)
                 {
-                    //Draw unicode character directly to screen pixels!
-                    Raylib.DrawText(symbol, screenX + 20, screenY + 15, 50, Color.Black);
+                    Texture2D texture = GetTexture(piece);
+                    //Draw textures
+                    Raylib.DrawTexture(texture, screenX, screenY, Color.White);
                 }
             }
         }
     }
+    // of course we also need to clean up the textures before closing raylib
+    private void UnloadTextures()
+    {
+        foreach (var texture in _pieceTextures.Values)
+        {
+            // this clears vram
+            // else this will stay on vram forever
+            // creating a native memory leak
+            Raylib.UnloadTexture(texture);
+        }
+        // clears ram
+        // c# does this using its garbage collector
+        _pieceTextures.Clear();
+    }
+    private Texture2D GetTexture(int piece)
+    {
+       // we now simply return an already laoded texture
+       // gemini said this retrieval is o(1) time
+       if(_pieceTextures.TryGetValue(piece, out Texture2D texture))
+        {
+            return texture;
+        }
+        throw new Exception($"Texture cant be found for {piece}");
+    }
+    //! un needed code
     // !this is a duplicated code
     private static string mapUnicode(int piece)
     {

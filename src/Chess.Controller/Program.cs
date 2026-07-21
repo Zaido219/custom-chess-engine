@@ -88,5 +88,5 @@ foreach (string moveStr in fullGameMoves)
     ConsoleInputHandler.Move(moveStr, board);
     BoardRenderer.Render(board);
     Console.WriteLine("-----------------------------------");
-    await Task.Delay(1000);
+    await Task.Delay(900);
 }
