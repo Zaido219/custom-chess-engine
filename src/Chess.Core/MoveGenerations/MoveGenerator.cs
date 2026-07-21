@@ -55,6 +55,15 @@ public static class MoveGenerator
         }
         return moves;
     }
+    // pawn moves
+    public static void GeneratePawnMoves(int startSquare, int piece, Board board)
+    {
+        // single square advance
+        // double square advances on the initial move
+        // diagonal captures
+        // en passant
+        // pawn promotions
+    }
     public static void GenerateSlidingMoves(int startSquare, int piece, Board board)
     {
         // --- THE DIRECTIONAL INDEX TRICK ---
