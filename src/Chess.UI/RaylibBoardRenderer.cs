@@ -15,23 +15,27 @@ public class RayLibBoardRenderer : IBoardRenderer
     // hard drive and allocate new GPU memory 60 times per second per piece.
     //  Your graphics memory will explode within seconds!
     private readonly Dictionary<int, Texture2D> _pieceTextures = new();
+    private static string GetAssetPath(string fileName)
+    {
+        // resolves path relative to the application execution directory
+        return Path.Combine(AppContext.BaseDirectory, "assets", fileName);
+    }
     public void InitializeTextures()
     {
         // White Pieces
-    _pieceTextures[Piece.White | Piece.King]   = Raylib.LoadTexture("assets/king-w.png");
-    _pieceTextures[Piece.White | Piece.Queen]  = Raylib.LoadTexture("assets/queen-w.png");
-    _pieceTextures[Piece.White | Piece.Rook]   = Raylib.LoadTexture("assets/rook-w.png");
-    _pieceTextures[Piece.White | Piece.Bishop] = Raylib.LoadTexture("assets/bishop-w.png");
-    _pieceTextures[Piece.White | Piece.Knight] = Raylib.LoadTexture("assets/knight-w.png");
-    _pieceTextures[Piece.White | Piece.Pawn]   = Raylib.LoadTexture("assets/pawn-w.png");
-
-    // Black Pieces
-    _pieceTextures[Piece.Black | Piece.King]   = Raylib.LoadTexture("assets/king-b.png");
-    _pieceTextures[Piece.Black | Piece.Queen]  = Raylib.LoadTexture("assets/queen-b.png");
-    _pieceTextures[Piece.Black | Piece.Rook]   = Raylib.LoadTexture("assets/rook-b.png");
-    _pieceTextures[Piece.Black | Piece.Bishop] = Raylib.LoadTexture("assets/bishop-b.png");
-    _pieceTextures[Piece.Black | Piece.Knight] = Raylib.LoadTexture("assets/knight-b.png");
-    _pieceTextures[Piece.Black | Piece.Pawn]   = Raylib.LoadTexture("assets/pawn-b.png");
+    _pieceTextures[Piece.White | Piece.King]   = Raylib.LoadTexture(GetAssetPath("king-w.png"));
+    _pieceTextures[Piece.White | Piece.Queen]  = Raylib.LoadTexture(GetAssetPath("queen-w.png"));
+    _pieceTextures[Piece.White | Piece.Rook]   = Raylib.LoadTexture(GetAssetPath("rook-w.png"));
+    _pieceTextures[Piece.White | Piece.Bishop] = Raylib.LoadTexture(GetAssetPath("bishop-w.png"));
+    _pieceTextures[Piece.White | Piece.Knight] = Raylib.LoadTexture(GetAssetPath("knight-w.png"));
+    _pieceTextures[Piece.White | Piece.Pawn]   = Raylib.LoadTexture(GetAssetPath("pawn-w.png"));
+    // Black Pieces 
+    _pieceTextures[Piece.Black | Piece.King]   = Raylib.LoadTexture(GetAssetPath("king-b.png"));
+    _pieceTextures[Piece.Black | Piece.Queen]  = Raylib.LoadTexture(GetAssetPath("queen-b.png"));
+    _pieceTextures[Piece.Black | Piece.Rook]   = Raylib.LoadTexture(GetAssetPath("rook-b.png"));
+    _pieceTextures[Piece.Black | Piece.Bishop] = Raylib.LoadTexture(GetAssetPath("bishop-b.png"));
+    _pieceTextures[Piece.Black | Piece.Knight] = Raylib.LoadTexture(GetAssetPath("knight-b.png"));
+    _pieceTextures[Piece.Black | Piece.Pawn]   = Raylib.LoadTexture(GetAssetPath("pawn-b.png"));
     }
     public void Render(Board board)
     {
