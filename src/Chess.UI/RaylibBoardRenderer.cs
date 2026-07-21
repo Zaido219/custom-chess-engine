@@ -1,9 +1,9 @@
 using Chess.Core.BoardState;
 namespace Chess.UI;
 
-class RayLibBoardRenderer
+class RayLibBoardRenderer : IBoardRenderer
 {
-    public static void RenderBoard(Board board)
+    public void Render(Board board)
     {
         
     }
