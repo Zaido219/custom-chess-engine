@@ -49,8 +49,11 @@ public class RayLibBoardRenderer : IBoardRenderer
             // main drawBoard function
             DrawBoard(board);
             
+
             Raylib.EndDrawing();
         }
+        // unload textures from vram
+        UnloadTextures();
         Raylib.CloseWindow();
 
     }
@@ -101,7 +104,7 @@ public class RayLibBoardRenderer : IBoardRenderer
         {
             return texture;
         }
-        throw new Exception($"Texture cant be found for {piece}");
+        throw new Exception($"No texture loaded for piece bitmask: {piece}");
     }
     //! un needed code
     // !this is a duplicated code
