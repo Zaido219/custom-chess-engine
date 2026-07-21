@@ -10,6 +10,8 @@ Board board = new Board();
 FenUtility fenUtility = new FenUtility();
 fenUtility.loadFen(startingPosition, board);
 
+IBoardRenderer BoardRenderer = new RayLibBoardRenderer();
+
 BoardRenderer.Render(board);
 // this is a test
 // An iterable sequence of a full chess game (Fried Liver Counter-Attack)
