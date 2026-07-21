@@ -1,9 +1,11 @@
 using System.Data;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Numerics;
 using Chess.Core.BoardState;
 using Raylib_cs;
 using Color = Raylib_cs.Color; // fixes namespace ambiguity
+using Rectangle = Raylib_cs.Rectangle;
 namespace Chess.UI;
 
 public class RayLibBoardRenderer : IBoardRenderer
@@ -85,7 +87,15 @@ public class RayLibBoardRenderer : IBoardRenderer
                 {
                     Texture2D texture = GetTexture(piece);
                     //Draw textures
-                    Raylib.DrawTexture(texture, screenX, screenY, Color.White);
+                    // draw texture can't correctly render the pieces
+                    Raylib.DrawTexturePro(
+                        texture,
+                        new Rectangle(0,0,texture.Width, texture.Height),
+                        new Rectangle(screenX, screenY, _squareSize, _squareSize),
+                        new Vector2(0,0),
+                        0.0f,
+                        Color.White
+                    );
                 }
             }
         }
