@@ -67,6 +67,7 @@ public class RayLibBoardRenderer : IBoardRenderer
         // dont forget to initialize your textures
         // once raylib/opengl is active
         // stupid
+        Init();
         // main render loop
         while (!Raylib.WindowShouldClose())
         {

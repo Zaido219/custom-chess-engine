@@ -13,5 +13,5 @@ fenUtility.loadFen(startingPosition, board);
 IBoardRenderer BoardRenderer = new RayLibBoardRenderer();
 IDragAndDropHandler dragHandler = new DragAndDropHandler();
 // init window and load graphic textures
-BoardRenderer.InitializeTextures();
+BoardRenderer.Init();
 BoardRenderer.Render(board);
