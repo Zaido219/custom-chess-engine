@@ -14,7 +14,7 @@ public static class MoveGenerator
     private static readonly int[,] numSquaresToEdge = new int[64, 8];
     private static List<Move> moves = new();
     // all valid knight's moves offset
-    private static readonly int[] knightOffsets = {17, 15, 10, 6, -6, -10, -15, -17};
+    private static readonly int[] knightOffsets = { 17, 15, 10, 6, -6, -10, -15, -17 };
 
     public static void preComputedMoveData()
     {
@@ -57,7 +57,7 @@ public static class MoveGenerator
                 {
                     GeneratePawnMoves(startSquare, piece, board);
                 }
-                else if(Piece.pieceType(piece) == Piece.King)
+                else if (Piece.pieceType(piece) == Piece.Knight)
                 {
                     GenerateKnightMoves(startSquare, piece, board);
                 }
@@ -91,10 +91,10 @@ public static class MoveGenerator
                 if ((fileChange == 1 && rankChange == 2) || (fileChange == 2 && rankChange == 1))
                 {
                     int targetPiece = board[targetSquare];
-                   if (!Piece.isColor(targetPiece,friendlyColor))
-                {
-                    moves.Add(new Move(startSquare, targetSquare));
-                }
+                    if (!Piece.isColor(targetPiece, friendlyColor))
+                    {
+                        moves.Add(new Move(startSquare, targetSquare));
+                    }
                 }
             }
         }
