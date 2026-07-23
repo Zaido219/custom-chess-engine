@@ -51,6 +51,19 @@ public class Board
         {
             throw new Exception("Cannot move an opponent's piece out of turn");
         }
+        // support for pawns en pasant move
+        bool isPawn = Piece.pieceType(piece) == Piece.Pawn;
+        int stepDistance = Math.Abs(move.TargetSquare - move.StartSquare);
+        // check if pawn moved 2 ranks
+        if(isPawn && stepDistance == 16)
+        {
+            EnPassantSquare = (move.StartSquare + move.TargetSquare) / 2;
+        }
+        else
+        {
+            // reset an en passant target if any other move is made
+            EnPassantSquare = -1;
+        }
         //assing it to move.targetSquare
         _squares[move.TargetSquare] = piece;
         //set move.StartSquare = Piece.None
