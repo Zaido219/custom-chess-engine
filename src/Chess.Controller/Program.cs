@@ -21,7 +21,7 @@ BoardRenderer.Init();
 while (!Raylib.WindowShouldClose())
 {
     Vector2 mousePos = Raylib.GetMousePosition();
-     //Mouse Clicked (Begin Drag)
+    //Mouse Clicked (Begin Drag)
     if (Raylib.IsMouseButtonPressed(MouseButton.Left))
     {
         int clickedSquare = GetSquareFromMouse(mousePos);
@@ -50,6 +50,19 @@ while (!Raylib.WindowShouldClose())
         {
             // Execute move on the board array!
             // e.g., board.MakeMove(sourceSquare, targetSquare);
+            try
+            {
+                // construct Move 
+                Move move = new Move(sourceSquare, targetSquare);
+                // execute the turn logic on the move
+                board.MakeMove(move);
+            }
+            catch (Exception ex)
+            {
+                // If the user tries to move out of turn or an empty square, 
+                // the exception catches it and the drop gracefully reverts!
+                Console.WriteLine($"Invalid move attempt: {ex.Message}");
+            }
         }
     }
 
