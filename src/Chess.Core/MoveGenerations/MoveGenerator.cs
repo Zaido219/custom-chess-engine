@@ -12,7 +12,7 @@ public static class MoveGenerator
     //tores the exact number of squares to the edge of the board from any given square in all 8 directions
     private static readonly int[] directionalOffsets = { 8, -8, -1, 1, 7, -7, 9, -9 };
     private static readonly int[,] numSquaresToEdge = new int[64, 8];
-    private static List<Move> moves;
+    private static List<Move> moves = new();
 
     public static void preComputedMoveData()
     {
@@ -50,6 +50,10 @@ public static class MoveGenerator
                 if (Piece.isSlidingPiece(piece))
                 {
                     GenerateSlidingMoves(startSquare, piece, board);
+                }
+                else if(Piece.pieceType(piece) == Piece.Pawn)
+                {
+                    GeneratePawnMoves(startSquare, piece, board);
                 }
             }
         }
