@@ -58,11 +58,84 @@ public static class MoveGenerator
     // pawn moves
     public static void GeneratePawnMoves(int startSquare, int piece, Board board)
     {
-        // single square advance
-        // double square advances on the initial move
+        // white paws move up the board +8
+        // black pawns move down the board -8
+        int pawnMoveOffset = (board.colorToMove == Piece.White) ? 8 : -8;
+        int startRank = (board.colorToMove == Piece.White) ? 1 : 6;
+        int promotionRank = (board.colorToMove == Piece.White) ? 7 : 0;
+
+        int currentRank = startSquare / 8;
+        int currentFile = startSquare % 8;
+        int targetSquare = startSquare + pawnMoveOffset;
+        // single push move
+        if (targetSquare >= 0 && targetSquare < 64 && board[targetSquare] == Piece.None)
+        {
+            if (targetSquare / 8 == promotionRank)
+            {
+                // Add 4 promotion variations
+            }
+            else
+            {
+                moves.Add(new Move(startSquare, targetSquare));
+            }
+
+            //adding double-step INSIDE the single-push block
+            // A pawn CANNOT double step if the square directly in front of it is blocked
+            int doubleStepTarget = startSquare + (pawnMoveOffset * 2);
+            if (currentRank == startRank && board[doubleStepTarget] == Piece.None)
+            {
+                moves.Add(new Move(startSquare, doubleStepTarget));
+            }
+        }
         // diagonal captures
-        // en passant
-        // pawn promotions
+        // Calculate diagonal offsets based on color
+        int leftCaptureOffset = (board.colorToMove == Piece.White) ? 7 : -9;
+        int rightCaptureOffset = (board.colorToMove == Piece.White) ? 9 : -7;
+        int opponentColor = board.colorToMove ^ (Piece.White | Piece.Black);
+
+        // Left capture (Only safe if NOT on File A -> currentFile > 0)
+        if (currentFile > 0)
+        {
+            int leftTarget = startSquare + leftCaptureOffset;
+            if (leftTarget >= 0 && leftTarget < 64)
+            {
+                int targetPiece = board[leftTarget];
+                if ((targetPiece != Piece.None && Piece.isColor(targetPiece, opponentColor)) || leftTarget == board.EnPassantSquare)
+                {
+                    if (leftTarget / 8 == promotionRank)
+                    {
+                        // TODO: Add promotion capture variations
+                    }
+                    else
+                    {
+                        moves.Add(new Move(startSquare, leftTarget));
+                    }
+
+                }
+            }
+        }
+
+        // Right capture (Only safe if NOT on File H -> currentFile < 7)
+        if (currentFile < 7)
+        {
+            int rightTarget = startSquare + rightCaptureOffset;
+            if (rightTarget >= 0 && rightTarget < 64)
+            {
+                int targetPiece = board[rightTarget];
+                if ((targetPiece != Piece.None && Piece.isColor(targetPiece, opponentColor)) || rightTarget == board.EnPassantSquare)
+                {
+                    if (rightTarget / 8 == promotionRank)
+                    {
+                        // TODO: Add promotion capture variations
+                    }
+                    else
+                    {
+                        moves.Add(new Move(startSquare, rightTarget));
+                    }
+                }
+            }
+
+        }
     }
     public static void GenerateSlidingMoves(int startSquare, int piece, Board board)
     {
