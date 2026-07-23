@@ -77,11 +77,6 @@ public class RayLibBoardRenderer : IBoardRenderer
 
 
         Raylib.EndDrawing();
-
-        // unload textures from vram
-        UnloadTextures();
-        Raylib.CloseWindow();
-
     }
     private void DrawDraggedPiece(Board board, IDragAndDropHandler dragHandler)
     {

@@ -17,7 +17,6 @@ IBoardRenderer BoardRenderer = new RayLibBoardRenderer();
 IDragAndDropHandler dragHandler = new DragAndDropHandler();
 // init window and load graphic textures
 BoardRenderer.Init();
-BoardRenderer.Render(board,dragHandler);
 // main game loop
 while (!Raylib.WindowShouldClose())
 {
