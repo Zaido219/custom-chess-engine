@@ -8,6 +8,9 @@ public class Board
     //represents board as a array of 64 square
     // will change this to bitboards later on
     private readonly int[] _squares;
+    //represents the target square for an en passant
+    // defualts to -1 when no en passant capture is availale on this turn
+    public int EnPassantSquare {get; set;} = -1;
     // method that will allow chess.ui to query whats piece is on this index
     // without knowing how the board is internally represented
     // this is the indexer
