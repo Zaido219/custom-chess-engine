@@ -66,7 +66,10 @@ public static class MoveGenerator
     {
         int startFile = startSquare % 8;
         int startRank = startSquare / 8;
-
+        // !repeated code
+        int opponentColor = board.colorToMove ^ (Piece.White | Piece.Black);
+        //!repeated code
+        int friendlyColor = board.colorToMove;
         foreach (int offset in knightOffsets)
         {
             int targetSquare = startSquare + offset;
@@ -83,7 +86,11 @@ public static class MoveGenerator
                 // A valid "L" jump ALWAYS changes 2 files and 1 rank, OR 1 file and 2 ranks
                 if ((fileChange == 1 && rankChange == 2) || (fileChange == 2 && rankChange == 1))
                 {
-                    // Now check piece occupancy on targetSquare!
+                    int targetPiece = board[targetSquare];
+                   if (!Piece.isColor(targetPiece,friendlyColor))
+                {
+                    moves.Add(new Move(startSquare, targetSquare));
+                }
                 }
             }
         }
