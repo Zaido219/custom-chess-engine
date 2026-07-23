@@ -57,6 +57,10 @@ public static class MoveGenerator
                 {
                     GeneratePawnMoves(startSquare, piece, board);
                 }
+                else if(Piece.pieceType(piece) == Piece.King)
+                {
+                    GenerateKnightMoves(startSquare, piece, board);
+                }
             }
         }
         return moves;
