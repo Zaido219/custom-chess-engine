@@ -13,6 +13,8 @@ public static class MoveGenerator
     private static readonly int[] directionalOffsets = { 8, -8, -1, 1, 7, -7, 9, -9 };
     private static readonly int[,] numSquaresToEdge = new int[64, 8];
     private static List<Move> moves = new();
+    // all valid knight's moves offset
+    private static readonly int[] knightOffsets = {17, 15, 10, 6, -6, -10, -15, -17};
 
     public static void preComputedMoveData()
     {
@@ -51,13 +53,40 @@ public static class MoveGenerator
                 {
                     GenerateSlidingMoves(startSquare, piece, board);
                 }
-                else if(Piece.pieceType(piece) == Piece.Pawn)
+                else if (Piece.pieceType(piece) == Piece.Pawn)
                 {
                     GeneratePawnMoves(startSquare, piece, board);
                 }
             }
         }
         return moves;
+    }
+    // knight moves
+    public static void GenerateKnightMoves(int startSquare, int piece, Board board)
+    {
+        int startFile = startSquare % 8;
+        int startRank = startSquare / 8;
+
+        foreach (int offset in knightOffsets)
+        {
+            int targetSquare = startSquare + offset;
+
+            if (targetSquare >= 0 && targetSquare < 64)
+            {
+                int targetFile = targetSquare % 8;
+                int targetRank = targetSquare / 8;
+
+                // Calculate absolute distance in ranks and files
+                int fileChange = Math.Abs(targetFile - startFile);
+                int rankChange = Math.Abs(targetRank - startRank);
+
+                // A valid "L" jump ALWAYS changes 2 files and 1 rank, OR 1 file and 2 ranks
+                if ((fileChange == 1 && rankChange == 2) || (fileChange == 2 && rankChange == 1))
+                {
+                    // Now check piece occupancy on targetSquare!
+                }
+            }
+        }
     }
     // pawn moves
     public static void GeneratePawnMoves(int startSquare, int piece, Board board)
