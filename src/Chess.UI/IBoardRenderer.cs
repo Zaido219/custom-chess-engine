@@ -5,4 +5,5 @@ public interface IBoardRenderer
 {
     void Init();
     void Render(Board board);
+    void Dispose();
 }
