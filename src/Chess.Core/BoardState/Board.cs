@@ -64,6 +64,24 @@ public class Board
             // reset an en passant target if any other move is made
             EnPassantSquare = -1;
         }
+        // en passant move capture removal
+        if(isPawn && move.TargetSquare == EnPassantSquare)
+        {
+            int capturedPawnSquare = (colorToMove == Piece.White)
+            ? move.TargetSquare - 8 
+            : move.TargetSquare + 8;
+            // update
+            _squares[capturedPawnSquare] = Piece.None;
+        }
+        // update en passant target for next turn
+        if(isPawn && stepDistance == 16)
+        {
+            EnPassantSquare = (move.StartSquare + move.TargetSquare) / 2;
+        }
+        else
+        {
+            EnPassantSquare = -1;
+        }
         //assing it to move.targetSquare
         _squares[move.TargetSquare] = piece;
         //set move.StartSquare = Piece.None
