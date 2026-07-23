@@ -34,8 +34,8 @@ public class RayLibBoardRenderer : IBoardRenderer
     // cleaner initialization method
     public void Init()
     {
-         // initialized window; if hindi pa
-         // this is first step always
+        // initialized window; if hindi pa
+        // this is first step always
         if (!Raylib.IsWindowReady())
         {
             Raylib.InitWindow(640, 640, "Chess engine");
@@ -48,47 +48,62 @@ public class RayLibBoardRenderer : IBoardRenderer
     {
         // remember in openGl raylib load texture requires an active openGL context
         // White Pieces
-    _pieceTextures[Piece.White | Piece.King]   = Raylib.LoadTexture(GetAssetPath("king-w.png"));
-    _pieceTextures[Piece.White | Piece.Queen]  = Raylib.LoadTexture(GetAssetPath("queen-w.png"));
-    _pieceTextures[Piece.White | Piece.Rook]   = Raylib.LoadTexture(GetAssetPath("rook-w.png"));
-    _pieceTextures[Piece.White | Piece.Bishop] = Raylib.LoadTexture(GetAssetPath("bishop-w.png"));
-    _pieceTextures[Piece.White | Piece.Knight] = Raylib.LoadTexture(GetAssetPath("knight-w.png"));
-    _pieceTextures[Piece.White | Piece.Pawn]   = Raylib.LoadTexture(GetAssetPath("pawn-w.png"));
-    // Black Pieces 
-    _pieceTextures[Piece.Black | Piece.King]   = Raylib.LoadTexture(GetAssetPath("king-b.png"));
-    _pieceTextures[Piece.Black | Piece.Queen]  = Raylib.LoadTexture(GetAssetPath("queen-b.png"));
-    _pieceTextures[Piece.Black | Piece.Rook]   = Raylib.LoadTexture(GetAssetPath("rook-b.png"));
-    _pieceTextures[Piece.Black | Piece.Bishop] = Raylib.LoadTexture(GetAssetPath("bishop-b.png"));
-    _pieceTextures[Piece.Black | Piece.Knight] = Raylib.LoadTexture(GetAssetPath("knight-b.png"));
-    _pieceTextures[Piece.Black | Piece.Pawn]   = Raylib.LoadTexture(GetAssetPath("pawn-b.png"));
+        _pieceTextures[Piece.White | Piece.King] = Raylib.LoadTexture(GetAssetPath("king-w.png"));
+        _pieceTextures[Piece.White | Piece.Queen] = Raylib.LoadTexture(GetAssetPath("queen-w.png"));
+        _pieceTextures[Piece.White | Piece.Rook] = Raylib.LoadTexture(GetAssetPath("rook-w.png"));
+        _pieceTextures[Piece.White | Piece.Bishop] = Raylib.LoadTexture(GetAssetPath("bishop-w.png"));
+        _pieceTextures[Piece.White | Piece.Knight] = Raylib.LoadTexture(GetAssetPath("knight-w.png"));
+        _pieceTextures[Piece.White | Piece.Pawn] = Raylib.LoadTexture(GetAssetPath("pawn-w.png"));
+        // Black Pieces 
+        _pieceTextures[Piece.Black | Piece.King] = Raylib.LoadTexture(GetAssetPath("king-b.png"));
+        _pieceTextures[Piece.Black | Piece.Queen] = Raylib.LoadTexture(GetAssetPath("queen-b.png"));
+        _pieceTextures[Piece.Black | Piece.Rook] = Raylib.LoadTexture(GetAssetPath("rook-b.png"));
+        _pieceTextures[Piece.Black | Piece.Bishop] = Raylib.LoadTexture(GetAssetPath("bishop-b.png"));
+        _pieceTextures[Piece.Black | Piece.Knight] = Raylib.LoadTexture(GetAssetPath("knight-b.png"));
+        _pieceTextures[Piece.Black | Piece.Pawn] = Raylib.LoadTexture(GetAssetPath("pawn-b.png"));
     }
-    public void Render(Board board)
+    public void Render(Board board, IDragAndDropHandler dragHandler)
     {
         // dont forget to initialize your textures
         // once raylib/opengl is active
         // stupid
-        Init();
-        // main render loop
-        while (!Raylib.WindowShouldClose())
-        {
-            Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.Black);
-            // main drawBoard function
-            DrawBoard(board);
-            
+        Raylib.BeginDrawing();
+        Raylib.ClearBackground(Color.Black);
+        // main drawBoard function
+        // draw the 8x8 grid, this skips the piece that is currently being dragged
+        DrawBoard(board, dragHandler);
+        // draw the dragged piece on top of everything else
+        DrawDraggedPiece(board, dragHandler);
 
-            Raylib.EndDrawing();
-        }
+
+        Raylib.EndDrawing();
+
         // unload textures from vram
         UnloadTextures();
         Raylib.CloseWindow();
 
     }
-    private void DrawBoard(Board board)
+    private void DrawDraggedPiece(Board board, IDragAndDropHandler dragHandler)
     {
-        for(int rank=7; rank >= 0; rank--)
+        if(!dragHandler.isDragging)return;
+        int activePiece = board[dragHandler.selectedSquareIndex];
+        if(activePiece == 0) return;
+
+        Texture2D texture = GetTexture(activePiece);
+        Raylib.DrawTexturePro(
+        texture,
+        new Rectangle(0, 0, texture.Width, texture.Height),
+        new Rectangle(dragHandler.currentDragPosition.X, dragHandler.currentDragPosition.Y, _squareSize, _squareSize),
+        new Vector2(0, 0),
+        0.0f,
+        Color.White
+    );
+    }
+    private void DrawBoard(Board board, IDragAndDropHandler dragHandler)
+    {
+        for (int rank = 7; rank >= 0; rank--)
         {
-            for(int file=0; file < 8; file++)
+            for (int file = 0; file < 8; file++)
             {
                 int index = (rank * 8) + file;
                 int piece = board[index];
@@ -100,16 +115,21 @@ public class RayLibBoardRenderer : IBoardRenderer
                 Color tileColor = isLightSquare ? new Color(240, 217, 181, 255) : new Color(181, 136, 99, 255);
                 Raylib.DrawRectangle(screenX, screenY, _squareSize, _squareSize, tileColor);
                 // render piece symbol if the piece isnt empty
-                if(piece != 0)
+                if (piece != 0)
                 {
                     Texture2D texture = GetTexture(piece);
                     //Draw textures
                     // draw texture can't correctly render the pieces
+                    // skip rendering piece if its currently being dragged
+                    if(dragHandler.isDragging && index == dragHandler.selectedSquareIndex)
+                    {
+                        continue;
+                    }
                     Raylib.DrawTexturePro(
                         texture,
-                        new Rectangle(0,0,texture.Width, texture.Height),
+                        new Rectangle(0, 0, texture.Width, texture.Height),
                         new Rectangle(screenX, screenY, _squareSize, _squareSize),
-                        new Vector2(0,0),
+                        new Vector2(0, 0),
                         0.0f,
                         Color.White
                     );
@@ -133,9 +153,9 @@ public class RayLibBoardRenderer : IBoardRenderer
     }
     private Texture2D GetTexture(int piece)
     {
-       // we now simply return an already laoded texture
-       // gemini said this retrieval is o(1) time
-       if(_pieceTextures.TryGetValue(piece, out Texture2D texture))
+        // we now simply return an already laoded texture
+        // gemini said this retrieval is o(1) time
+        if (_pieceTextures.TryGetValue(piece, out Texture2D texture))
         {
             return texture;
         }
@@ -148,23 +168,23 @@ public class RayLibBoardRenderer : IBoardRenderer
         return piece switch
         {
             // White Pieces
-        (Piece.White | Piece.King)   => "\u2654",
-        (Piece.White | Piece.Queen)  => "\u2655",
-        (Piece.White | Piece.Rook)   => "\u2656",
-        (Piece.White | Piece.Bishop) => "\u2657",
-        (Piece.White | Piece.Knight) => "\u2658",
-        (Piece.White | Piece.Pawn)   => "\u2659",
+            (Piece.White | Piece.King) => "\u2654",
+            (Piece.White | Piece.Queen) => "\u2655",
+            (Piece.White | Piece.Rook) => "\u2656",
+            (Piece.White | Piece.Bishop) => "\u2657",
+            (Piece.White | Piece.Knight) => "\u2658",
+            (Piece.White | Piece.Pawn) => "\u2659",
 
-        // Black Pieces
-        (Piece.Black | Piece.King)   => "\u265A",
-        (Piece.Black | Piece.Queen)  => "\u265B",
-        (Piece.Black | Piece.Rook)   => "\u265C",
-        (Piece.Black | Piece.Bishop) => "\u265D",
-        (Piece.Black | Piece.Knight) => "\u265E",
-        (Piece.Black | Piece.Pawn)   => "\u265F",
+            // Black Pieces
+            (Piece.Black | Piece.King) => "\u265A",
+            (Piece.Black | Piece.Queen) => "\u265B",
+            (Piece.Black | Piece.Rook) => "\u265C",
+            (Piece.Black | Piece.Bishop) => "\u265D",
+            (Piece.Black | Piece.Knight) => "\u265E",
+            (Piece.Black | Piece.Pawn) => "\u265F",
 
-        // Empty square or fallback
-        _ => "."
+            // Empty square or fallback
+            _ => "."
         };
     }
 }

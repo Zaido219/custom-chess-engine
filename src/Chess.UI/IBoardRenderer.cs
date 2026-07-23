@@ -4,6 +4,6 @@ namespace Chess.UI;
 public interface IBoardRenderer
 {
     void Init();
-    void Render(Board board);
+    void Render(Board board, IDragAndDropHandler dragHandler);
     void Dispose();
 }
