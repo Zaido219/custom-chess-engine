@@ -18,6 +18,8 @@ IDragAndDropHandler dragHandler = new DragAndDropHandler();
 // init window and load graphic textures
 BoardRenderer.Init();
 // main game loop
+// contains squares that will be highlighted
+List<int> activeMoveHighlights = new List<int>();
 while (!Raylib.WindowShouldClose())
 {
     Vector2 mousePos = Raylib.GetMousePosition();
@@ -31,6 +33,12 @@ while (!Raylib.WindowShouldClose())
         {
             Vector2 tileOrigin = GetTileOrigin(clickedSquare);
             dragHandler.BeginDrag(clickedSquare, mousePos, tileOrigin);
+            // generate moves and filter targets for the selected piece
+            List<Move> allMoves = MoveGenerator.GenerateMoves(board);
+            activeMoveHighlights = allMoves
+                .Where(m => m.StartSquare == clickedSquare)
+                .Select(m => m.TargetSquare)
+                .ToList();
         }
     }
 
@@ -64,11 +72,13 @@ while (!Raylib.WindowShouldClose())
                 Console.WriteLine($"Invalid move attempt: {ex.Message}");
             }
         }
+        // clear highlights after drag completes
+        activeMoveHighlights.Clear();
     }
 
     // render pass
     // Pass dragHandler so BoardRenderer knows which piece to float
-    BoardRenderer.Render(board, dragHandler);
+    BoardRenderer.Render(board, dragHandler, activeMoveHighlights);
 }
 BoardRenderer.Dispose();
 

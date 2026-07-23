@@ -62,7 +62,7 @@ public class RayLibBoardRenderer : IBoardRenderer
         _pieceTextures[Piece.Black | Piece.Knight] = Raylib.LoadTexture(GetAssetPath("knight-b.png"));
         _pieceTextures[Piece.Black | Piece.Pawn] = Raylib.LoadTexture(GetAssetPath("pawn-b.png"));
     }
-    public void Render(Board board, IDragAndDropHandler dragHandler)
+    public void Render(Board board, IDragAndDropHandler dragHandler, IEnumerable<int>? highLightedSquares)
     {
         // dont forget to initialize your textures
         // once raylib/opengl is active
@@ -71,7 +71,8 @@ public class RayLibBoardRenderer : IBoardRenderer
         Raylib.ClearBackground(Color.Black);
         // main drawBoard function
         // draw the 8x8 grid, this skips the piece that is currently being dragged
-        DrawBoard(board, dragHandler);
+        // highLigthedSquares are the valid moves
+        DrawBoard(board, dragHandler, highLightedSquares);
         // draw the dragged piece on top of everything else
         DrawDraggedPiece(board, dragHandler);
 
@@ -94,8 +95,10 @@ public class RayLibBoardRenderer : IBoardRenderer
         Color.White
     );
     }
-    private void DrawBoard(Board board, IDragAndDropHandler dragHandler)
+    private void DrawBoard(Board board, IDragAndDropHandler dragHandler, IEnumerable<int>? highLightedSquares)
     {
+        // convert to hash set for fast look-up
+        HashSet<int>? highLightSet = highLightedSquares != null ? new HashSet<int>(highLightedSquares) : null;
         for (int rank = 7; rank >= 0; rank--)
         {
             for (int file = 0; file < 8; file++)
@@ -109,6 +112,20 @@ public class RayLibBoardRenderer : IBoardRenderer
                 bool isLightSquare = (rank + file) % 2 != 0;
                 Color tileColor = isLightSquare ? new Color(240, 217, 181, 255) : new Color(181, 136, 99, 255);
                 Raylib.DrawRectangle(screenX, screenY, _squareSize, _squareSize, tileColor);
+                //overlay move highlight
+                if (highLightSet != null && highLightSet.Contains(index))
+                {
+                    // fully copy pasted from gemini
+                    // Alpha = 120 gives a semi-transparent overlay over the base tile
+                    Color highlightColor = new Color(230, 41, 55, 120);
+                    Raylib.DrawRectangle(screenX, screenY, _squareSize, _squareSize, highlightColor);
+
+                    // Option B (Alternative): Draw a subtle dot in the center of the square
+                    // int centerX = screenX + (_squareSize / 2);
+                    // int centerY = screenY + (_squareSize / 2);
+                    // Raylib.DrawCircle(centerX, centerY, 12, new Color(230, 41, 55, 180));
+
+                }
                 // render piece symbol if the piece isnt empty
                 if (piece != 0)
                 {
