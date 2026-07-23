@@ -22,8 +22,31 @@ public class RayLibBoardRenderer : IBoardRenderer
         // resolves path relative to the application execution directory
         return Path.Combine(AppContext.BaseDirectory, "assets", fileName);
     }
+    // disposes raylib
+    public void Dispose()
+    {
+        UnloadTextures();
+        if (Raylib.IsWindowReady())
+        {
+            Raylib.CloseWindow();
+        }
+    }
+    // cleaner initialization method
+    public void Init()
+    {
+         // initialized window; if hindi pa
+         // this is first step always
+        if (!Raylib.IsWindowReady())
+        {
+            Raylib.InitWindow(640, 640, "Chess engine");
+            Raylib.SetTargetFPS(60);
+        }
+        // then load textures
+        InitializeTextures();
+    }
     public void InitializeTextures()
     {
+        // remember in openGl raylib load texture requires an active openGL context
         // White Pieces
     _pieceTextures[Piece.White | Piece.King]   = Raylib.LoadTexture(GetAssetPath("king-w.png"));
     _pieceTextures[Piece.White | Piece.Queen]  = Raylib.LoadTexture(GetAssetPath("queen-w.png"));
@@ -41,16 +64,9 @@ public class RayLibBoardRenderer : IBoardRenderer
     }
     public void Render(Board board)
     {
-        // initialized window; if hindi pa
-        if (!Raylib.IsWindowReady())
-        {
-            Raylib.InitWindow(640, 640, "Chess engine");
-            Raylib.SetTargetFPS(60);
-        }
         // dont forget to initialize your textures
         // once raylib/opengl is active
         // stupid
-        InitializeTextures();
         // main render loop
         while (!Raylib.WindowShouldClose())
         {
